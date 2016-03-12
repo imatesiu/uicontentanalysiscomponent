@@ -2,8 +2,10 @@
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -13,7 +15,10 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 
 import eu.learnpad.ca.rest.data.collaborative.AnnotatedCollaborativeContentAnalyses;
 import eu.learnpad.ca.rest.data.collaborative.AnnotatedCollaborativeContentAnalysis;
@@ -38,6 +43,7 @@ public class ContentAnalysisBean implements Serializable {
 	private String Reccomandation;
 	private String id;
 	private String status;
+	private List<String> elements;
 	private Collection<AnnotatedCollaborativeContentAnalysis> collectionannotatedcontent;
 
 
@@ -64,6 +70,7 @@ public class ContentAnalysisBean implements Serializable {
 	}
 
 	public void setAllid(String ID){
+		ID = elements.get(Integer.valueOf(ID)-1);
 		this.id = ID;
 	}
 	
@@ -71,13 +78,16 @@ public class ContentAnalysisBean implements Serializable {
 		return this.id;
 	}
 
-	public Collection<String> getCollectionids(){
-		Client client = ClientBuilder.newClient();
+	public Collection<String> getCollectionids(){//.type(MediaType.APPLICATION_XML)
+		Client client = ClientBuilder.newClient().register(JacksonJaxbJsonProvider.class);
 		WebTarget target = client.target("http://localhost:8080").path("lp-content-analysis/learnpad/ca/bridge/allid");
 		Response allID =  target.request().get();
-		String res = allID.readEntity(String.class);
-		
-		return Arrays.asList(res.split(";"));
+		elements = allID.readEntity(new GenericType<List<String>>() {});
+		List<String> res = new ArrayList<String>();
+		for (int i = 1; i <= elements.size(); i++) {
+			res.add(String.valueOf(i));
+		}
+		return res;
 	}
 
 	public void setStatus(String status) {
