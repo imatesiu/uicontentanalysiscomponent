@@ -10,7 +10,9 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -190,6 +192,7 @@ public class ContentAnalysisBean implements Serializable {
 
 
 	public void setId(String id) {
+		this.collectionannotatedcontent = null;
 		this.id = id;
 	}
 
@@ -238,8 +241,17 @@ public class ContentAnalysisBean implements Serializable {
 		log.trace("Status: "+status);
 
 		if(status.equals("OK")){
+			
+			HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			String ipAddress = request.getHeader("X-FORWARDED-FOR");
+			if (ipAddress == null) {
+			    ipAddress = request.getRemoteAddr();
+			    ipAddress = request.getRemoteHost();
+			}
+			System.out.println("ipAddress:" + ipAddress);
+			
 			target = client.target("http://localhost:8080").path("lp-content-analysis/learnpad/ca/bridge/validatecollaborativecontent/"+id);
-			Response annotatecontent =  target.request().get();
+			Response annotatecontent =  target.request().header("X-FORWARDED-FOR", ipAddress).get();
 			AnnotatedCollaborativeContentAnalyses res = annotatecontent.readEntity(new GenericType<AnnotatedCollaborativeContentAnalyses>() {});
 			this.setCollectionannotatedcontent(res.getAnnotateCollaborativeContentAnalysis());
 
