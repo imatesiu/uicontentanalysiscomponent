@@ -44,6 +44,7 @@ public class ContentBean implements Serializable{
 	private String ContentHTML;
 	private String Language;
 	private String restid;
+	private String typedoc;
 	private String filecontent;
 	private String filecontenthtml;
 	private String filename;
@@ -67,6 +68,18 @@ public class ContentBean implements Serializable{
 	}
 
 	
+
+	public String getTypedoc() {
+		return typedoc;
+	}
+
+
+
+	public void setTypedoc(String typedoc) {
+		this.typedoc = typedoc;
+	}
+
+
 
 	public boolean isCorrectness() {
 		return Correctness;

@@ -39,6 +39,17 @@
 			</h:selectOneMenu>
 			<h:message for="language" />
 
+<h:outputLabel for="typedoc" value="typedoc:" />
+			<h:selectOneMenu id="typedoc" value="#{ContentBean.typedoc}"
+				required="true">
+				<f:selectItem noSelectionOption="true" itemValue=""
+					itemLabel="--Select--" />
+				<f:selectItem itemValue="English UK" />
+				<f:selectItem itemValue="English US" />
+				<f:selectItem itemValue="Italian" />
+				<f:ajax execute="typedoc" render=":idlang"/>
+			</h:selectOneMenu>
+			<h:message for="typedoc" />
 
 			<h:outputLabel for="Content" value="Content:" />
 			<h:inputTextarea id="Content" value="#{ContentBean.content}"
@@ -107,7 +118,7 @@
 			action="#{pageController.navigatePageGetAnalysis}"
 			actionListener="#{ContentBean.submitButton}" >
 			
-
+<f:setPropertyActionListener target="#{ContentAnalysisBean.collectionannotatedcontent}"  value="#{null}" />
  <f:setPropertyActionListener target="#{ContentAnalysisBean.id}"  value="#{ContentBean.restid}" />
 </h:commandButton>
 

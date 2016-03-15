@@ -1,11 +1,14 @@
 package eu.learnpad.ca.rest.data.collaborative;
 
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import eu.learnpad.ca.rest.data.QualityCriteria;
@@ -15,20 +18,41 @@ import eu.learnpad.ca.rest.data.QualityCriteria;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
 		"language",
+		"typeofdoc",
     "collaborativeContent",
     "qualityCriteria"
 })
 @XmlRootElement(name = "CollaborativeContentAnalysis")
-public class CollaborativeContentAnalysis {
+public class CollaborativeContentAnalysis implements Serializable{
 
+	/**
+	 * 
+	 */
+	@XmlTransient
+	private static final long serialVersionUID = -8767595485129023211L;
+	
 	@XmlAttribute(name = "language", required = true)
 	protected String language;
+	@XmlAttribute(name = "type_of_doc")
+	protected String typeofdoc;
     @XmlElement(name = "CollaborativeContent", required = true)
     protected CollaborativeContent collaborativeContent;
     @XmlElement(name = "QualityCriteria", required = true)
     protected QualityCriteria qualityCriteria;
+    
+    
+    
+    
 
-    /**
+    public String getTypeofdoc() {
+		return typeofdoc;
+	}
+
+	public void setTypeofdoc(String typeofdoc) {
+		this.typeofdoc = typeofdoc;
+	}
+
+	/**
      * Get the value of language.
      * 
      * @return

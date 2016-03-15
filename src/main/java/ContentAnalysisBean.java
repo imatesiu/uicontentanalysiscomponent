@@ -70,7 +70,11 @@ public class ContentAnalysisBean implements Serializable {
 	}
 
 	public void setAllid(String ID){
+		try{
 		ID = elements.get(Integer.valueOf(ID)-1);
+		}catch(Exception e){
+			ID = "EMPTY";
+		}
 		this.id = ID;
 	}
 	
